@@ -11,6 +11,7 @@
     - 9 Static Photos are Displayed on the Page 
             - Need to include static_url, animated_url, and image_state as attributes
             - For loop of the data set pulled 
+            - Flex Wrap?
         - Each photo will have the Rating of the Photo also show. 
 
 + When any static picture is clicked
@@ -24,3 +25,6 @@
     - New Animal is added to array. 
     - Buttons are dynamically reloaded to page. 
     - Text field is cleared out. 
+
+
+    */
