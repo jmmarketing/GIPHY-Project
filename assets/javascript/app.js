@@ -29,27 +29,30 @@
 
     */
 
-   $( document ).ready(function() {
-   
+$(document).ready(function () {
+
+    // ------------- Global Variables ----------------
+
     var characters = ["Michael Scott", "Pickle Rick", "Andy Dwyer"];
 
 
 
     // --------------- Function to Create Buttons ----------------
-    function createButtons(){
+    function createButtons() {
         $("#button-list").empty();
 
-        for (var i = 0; i < characters.length; i++){
+        for (var i = 0; i < characters.length; i++) {
             var movieButton = $("<button>");
-            movieButton.attr("class", "btn btn-secondary mx-1");
+            movieButton.attr("class", "btn btn-secondary mx-1 my-1");
             movieButton.attr("data-name", characters[i]);
+            movieButton.attr("id", "quick-button");
             movieButton.text(characters[i]);
             $("#button-list").append(movieButton);
         }
     };
 
     // --------------- Function Add Buttons from Input Field on Click-------
-    $("#gif-input-button").on("click", function (event){
+    $("#gif-input-button").on("click", function (event) {
         event.preventDefault();
         var addCharacter = $("#character-add-input").val().trim();
         console.log(addCharacter);
@@ -58,5 +61,50 @@
         $("#character-add-input").val("")
     });
 
+// --------------------- Generate GIFs on Button Click -----------------------
+    $(document).on("click", "#quick-button", function(){
+        var person = $(this).attr("data-name");
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        person + "&api_key=cshvEUcxDKKEJn7eiyRt3ooPG6TAGXFn&limit=10";
+
+        $("#gif-results").empty();
+
+        // ----------- AJAX Call to Giphy -------------
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        })
+            .then(function(response){
+                var results = response.data;
+                console.log(results);
+
+                for (var j = 0; j < results.length; j++){
+                    var picDiv = $("<div>");
+                    var p = $("<p>");
+                    var stillImage = results[j].images.fixed_height_still.url;
+                    var gifImage = results[j].images.fixed_height.url;
+
+                    picDiv.attr("class", "float-left");
+                    p.attr("class", "text-center");
+                    p.text("This Picture Is Rated: " + results[j].rating.toUpperCase());
+
+                    var picImg = $("<img>");
+                    picImg.attr("src", stillImage)
+                        .attr("data-state", "still")
+                        .attr("data-still", stillImage)
+                        .attr("data-animate", gifImage)
+                        .attr("class", "gif rounded mx-2 my-2");
+                    
+                    picDiv.append(picImg).append(p);
+
+                    $("#gif-results").append(picDiv);
+
+                }
+            })
+        
+    });
+
+    // -------------- Function to Change Gif to Animate/Still ---------
+
     createButtons();
-   })
+})
