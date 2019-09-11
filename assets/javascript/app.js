@@ -31,7 +31,7 @@
 
    $( document ).ready(function() {
    
-    var inputCharacters = ["Michael Scott", "Pickle Rick", "Andy Dwyer"];
+    var characters = ["Michael Scott", "Pickle Rick", "Andy Dwyer"];
 
 
 
@@ -39,16 +39,24 @@
     function createButtons(){
         $("#button-list").empty();
 
-        for (var i = 0; i < inputCharacters.length; i++){
+        for (var i = 0; i < characters.length; i++){
             var movieButton = $("<button>");
             movieButton.attr("class", "btn btn-secondary mx-1");
-            movieButton.attr("data-name", inputCharacters[i]);
-            movieButton.text(inputCharacters[i]);
+            movieButton.attr("data-name", characters[i]);
+            movieButton.text(characters[i]);
             $("#button-list").append(movieButton);
         }
-    }
+    };
 
-    // --------------- Function Add Buttons from Input Field -------
+    // --------------- Function Add Buttons from Input Field on Click-------
+    $("#gif-input-button").on("click", function (event){
+        event.preventDefault();
+        var addCharacter = $("#character-add-input").val().trim();
+        console.log(addCharacter);
+        characters.push(addCharacter);
+        createButtons();
+        $("#character-add-input").val("")
+    });
 
     createButtons();
    })
