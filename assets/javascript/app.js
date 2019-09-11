@@ -106,5 +106,19 @@ $(document).ready(function () {
 
     // -------------- Function to Change Gif to Animate/Still ---------
 
+    $(document).on("click", ".gif", function(){
+        var state = $(this).attr("data-state");
+
+        if (state === "still"){
+            $(this).attr("src", $(this).attr("data-animate"));
+            $(this).attr("data-state", "animate");
+        }
+
+        if (state === "animate"){
+            $(this).attr("src", $(this).attr("data-still"));
+            $(this).attr("data-state", "still")
+        }
+    })
+
     createButtons();
 })
