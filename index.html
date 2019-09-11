@@ -30,20 +30,23 @@
                             <h1 class="text-center">The Movie/TV Show Character GIF Search</h1>
                         </div>
                         <!-- Left Side Search & Buttons-->
-
+                        <h4 class="text-center pb-3 px-3"> Use the field below to add new characters to the quick search list.</h4>
                         <!-- INPUT FIELD-->
-                        <form class="px-3">
+                        <form class="px-3 mt-2">
                             <div class="form-group">
                                 <input type="text" class="form-control" id="gif-search-input" aria-describedby="emailHelp"
                                     placeholder="Character Name">
                                 <small id="inputHelp" class="form-text text-muted">Enter the character name to add to
-                                    the button list.</small>
+                                    the quick search list.</small>
                             </div>
-                            <button type="submit" id="gif-input-button" class="btn btn-outline-primary btn-block mb-4">Add Character</button>
+                            <button type="submit" id="gif-input-button" class="btn btn-outline-primary btn-block mb-4">Add To Quick Search</button>
                         </form>
 
+                        <hr>
+
+                        <h4 class="text-center pb-3 px-3"> Character Quick Search</h4>
                         <!---- Button List ----->
-                        <div id="button-list">
+                        <div id="button-list" class="pb-2">
 
                         </div>
 
@@ -56,6 +59,7 @@
                 <div class="card card-default">
                     <div class="card-header text-center">
                         <h2>Top GIF Results</h2>
+                        <p>Click image to play/pause GIF</p>
                     </div>
                     <!-- Display Gifs Below-->
                     <div class="card-body">
