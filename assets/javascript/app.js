@@ -28,3 +28,27 @@
 
 
     */
+
+   $( document ).ready(function() {
+   
+    var inputCharacters = ["Michael Scott", "Pickle Rick", "Andy Dwyer"];
+
+
+
+    // --------------- Function to Create Buttons ----------------
+    function createButtons(){
+        $("#button-list").empty();
+
+        for (var i = 0; i < inputCharacters.length; i++){
+            var movieButton = $("<button>");
+            movieButton.attr("class", "btn btn-secondary mx-1");
+            movieButton.attr("data-name", inputCharacters[i]);
+            movieButton.text(inputCharacters[i]);
+            $("#button-list").append(movieButton);
+        }
+    }
+
+    // --------------- Function Add Buttons from Input Field -------
+
+    createButtons();
+   })
