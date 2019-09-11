@@ -10,7 +10,7 @@
     <!-- CSS Links-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/css/reset.css">
+    <!--<link rel="stylesheet" href="assets/css/reset.css">-->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
@@ -19,30 +19,55 @@
     <!-- Main Container - BOOTSTRAP-->
     <div class="container-fluid">
 
-            <div class="row my-5">
+        <div class="row my-5">
 
-                    <!-- Sign-Up Card-->
-                    <div class="col-4">
-                      <div class="card card-default">
-                        <div class="card-body">
-                            TEST TEST TEST
+            <!-- Left Side-->
+            <div class="col-4">
+                <div class="card card-default">
+                    <div class="card-body p-0">
+                        <!-- Left Side Header-->
+                        <div class="jumbotron ">
+                            <h1 class="text-center">The Movie/TV Show Character GIF Search</h1>
                         </div>
-                      </div>
+                        <!-- Left Side Search & Buttons-->
+
+                        <!-- INPUT FIELD-->
+                        <form class="px-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="gif-search-input" aria-describedby="emailHelp"
+                                    placeholder="Character Name">
+                                <small id="inputHelp" class="form-text text-muted">Enter the character name to add to
+                                    the button list.</small>
+                            </div>
+                            <button type="submit" id="gif-input-button" class="btn btn-outline-primary btn-block mb-4">Add Character</button>
+                        </form>
+
+                        <!---- Button List ----->
+                        <div id="button-list">
+
+                        </div>
+
                     </div>
-              
-                    <!-- Most Recent Member card -->
-                    <div class="col-8">
-                      <div class="card card-default">
-                        <div class="card-header">
-                          YOUR GIFS
-                        </div>
-                        <div class="card-body">
-                          
-                        </div>
-                      </div>
+                </div>
+            </div>
+
+            <!-- Rightside to Display Gifs -->
+            <div class="col-8">
+                <div class="card card-default">
+                    <div class="card-header text-center">
+                        <h2>Top GIF Results</h2>
                     </div>
-              
-                  </div>
+                    <!-- Display Gifs Below-->
+                    <div class="card-body">
+                        <div id="gif-results">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
     </div>
 
