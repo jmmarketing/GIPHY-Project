@@ -35,23 +35,7 @@ $(document).ready(function () {
 
     var characters = ["Michael Scott", "Pickle Rick", "Andy Dwyer"];
 
-
-
-    // --------------- Function to Create Buttons ----------------
-    function createButtons() {
-        $("#button-list").empty();
-
-        for (var i = 0; i < characters.length; i++) {
-            var movieButton = $("<button>");
-            movieButton.attr("class", "btn btn-secondary mx-1 my-1");
-            movieButton.attr("data-name", characters[i]);
-            movieButton.attr("id", "quick-button");
-            movieButton.text(characters[i]);
-            $("#button-list").append(movieButton);
-        }
-    };
-
-    // --------------- Function Add Buttons from Input Field on Click-------
+    // --------------- On Click Function to Add Input Field to Array for Create Buttons Function-------
     $("#gif-input-button").on("click", function (event) {
         event.preventDefault();
         var addCharacter = $("#character-add-input").val().trim();
@@ -59,26 +43,49 @@ $(document).ready(function () {
         characters.push(addCharacter);
         createButtons();
         $("#character-add-input").val("")
+     
     });
 
-// --------------------- Generate GIFs on Button Click -----------------------
-    $(document).on("click", "#quick-button", function(){
+    // --------------- Function to Create Buttons ----------------
+    function createButtons() {
+        $("#button-list").empty();
+
+        // ------------- Local Storage -------------
+        localStorage.setItem("arrayCharacters", JSON.stringify(characters));
+        var newCharacters = JSON.parse(localStorage.getItem("arrayCharacters"));
+        //------------------------------------------
+        console.log(newCharacters.length);
+
+        for (var i = 0; i < newCharacters.length; i++) {
+            var movieButton = $("<button>");
+            movieButton.attr("class", "btn btn-secondary mx-1 my-1");
+            movieButton.attr("data-name", newCharacters[i]);
+            movieButton.attr("id", "quick-button");
+            movieButton.text(newCharacters[i]);
+            $("#button-list").append(movieButton);
+        }
+    };
+
+    // --------------------- Generate GIFs on Button Click -----------------------
+    //----------------------------------------------------------------------------
+    $(document).on("click", "#quick-button", function () {
         var person = $(this).attr("data-name");
         var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        person + "&api_key=cshvEUcxDKKEJn7eiyRt3ooPG6TAGXFn&limit=10";
+            person + "&api_key=cshvEUcxDKKEJn7eiyRt3ooPG6TAGXFn&limit=10";
 
         $("#gif-results").empty();
+        $("#get-more").empty();
 
         // ----------- AJAX Call to Giphy -------------
         $.ajax({
             url: queryURL,
             method: "GET"
         })
-            .then(function(response){
+            .then(function (response) {
                 var results = response.data;
                 console.log(results);
 
-                for (var j = 0; j < results.length; j++){
+                for (var j = 0; j < results.length; j++) {
                     var picDiv = $("<div>");
                     var p = $("<p>");
                     var stillImage = results[j].images.fixed_height_still.url;
@@ -94,31 +101,99 @@ $(document).ready(function () {
                         .attr("data-still", stillImage)
                         .attr("data-animate", gifImage)
                         .attr("class", "gif rounded mx-2 my-2");
-                    
+
                     picDiv.append(picImg).append(p);
 
                     $("#gif-results").append(picDiv);
 
                 }
             })
-        
+
+        // ------------- Add Load More Button to Bottom of Results ----------
+        var loadMoreButton = $("<button>");
+        loadMoreButton.attr("class", "btn btn-outline-primary btn-block my-4")
+            .attr("data-name", person)
+            .attr("data-offset", "10") // <-- important for the Load More Button
+            .attr("id", "load-more-gifs")
+            .text("Load More GIFs");
+        $("#get-more").append(loadMoreButton);
+
     });
 
     // -------------- Function to Change Gif to Animate/Still ---------
 
-    $(document).on("click", ".gif", function(){
+    $(document).on("click", ".gif", function () {
         var state = $(this).attr("data-state");
 
-        if (state === "still"){
+        if (state === "still") {
             $(this).attr("src", $(this).attr("data-animate"));
             $(this).attr("data-state", "animate");
         }
 
-        if (state === "animate"){
+        if (state === "animate") {
             $(this).attr("src", $(this).attr("data-still"));
             $(this).attr("data-state", "still")
         }
     })
 
+    // --------------------- ADD 10 MORE GIFS ON CLICK -----------------------
+    //-------------------------------------------------------------------------
+    $(document).on("click", "#load-more-gifs", function () {
+        var person = $(this).attr("data-name");
+        var offset = parseInt($(this).attr("data-offset")) + 10;  // <--- Added this to offset so you dont get the same X# of posts again. 
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+            person + "&api_key=cshvEUcxDKKEJn7eiyRt3ooPG6TAGXFn&limit=10&offset=" + offset + "";
+
+        // $("#gif-results").empty(); <--- Need to remove this so it doesnt keep reloading (ie Bad UX)
+        $("#get-more").empty();
+
+        // ----------- AJAX Call to Giphy -------------
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        })
+            .then(function (response) {
+                var results = response.data;
+                console.log(results);
+
+                for (var j = 0; j < results.length; j++) {
+                    var picDiv = $("<div>");
+                    var p = $("<p>");
+                    var stillImage = results[j].images.fixed_height_still.url;
+                    var gifImage = results[j].images.fixed_height.url;
+
+                    picDiv.attr("class", "float-left");
+                    p.attr("class", "text-center");
+                    p.text("This Picture Is Rated: " + results[j].rating.toUpperCase());
+
+                    var picImg = $("<img>");
+                    picImg.attr("src", stillImage)
+                        .attr("data-state", "still")
+                        .attr("data-still", stillImage)
+                        .attr("data-animate", gifImage)
+                        .attr("class", "gif rounded mx-2 my-2");
+
+                    picDiv.append(picImg).append(p);
+
+                    $("#gif-results").append(picDiv);
+
+                }
+            })
+
+        // ------------- Add Load More Button to Bottom of Results ----------
+        var loadMoreButton = $("<button>");
+        loadMoreButton.attr("class", "btn btn-outline-primary btn-block my-4")
+            .attr("data-name", person)
+            .attr("data-offset", offset)
+            .attr("id", "load-more-gifs")
+            .text("Load 10 More GIFs");
+        $("#get-more").append(loadMoreButton);
+
+    });
+
+
+
+
+    //------------ Create the initial Sample Buttons --------------
     createButtons();
 })
